@@ -1,1 +1,0 @@
-# manoj-gupta.github.io
