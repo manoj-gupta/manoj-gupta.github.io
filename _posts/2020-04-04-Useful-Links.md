@@ -5,6 +5,8 @@ date:   2020-04-04 18:00:00 +0530
 categories: Misc
 ---
 
+Links that are useful in every day life. 
+
 # Global
 * COVID-19
     * [Coronavirus world meter](https://www.worldometers.info/coronavirus/)
