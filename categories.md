@@ -1,7 +1,7 @@
 ---
 layout: page
 title: ARCHIEVES
-permalink: /categoryview/
+permalink: /categories/
 sitemap: false
 ---
 
