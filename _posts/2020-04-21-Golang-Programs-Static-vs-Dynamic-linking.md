@@ -9,14 +9,14 @@ categories:
 
 It is well known that Golang creates static binaries by default. But is that so?
 
-I was taken by surprise to find out all the Golang binaries that we were using were dynamic. We were always trying to find out option to enable dynamic linking and here we have all the binaries having dynamic linking. This was easily verified by using *file* command on binary
+I was taken by surprise to find out all the Golang binaries that I was using were using dynamic linking. This was easily verified by using *file* command on binary
 
 ```
 $ file test.gobin
 file test.gobin:      ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), not stripped
 ```
 
-To further looking into the libaries being linked, use ldd command
+To find out the libaries being linked, use *ldd* command
 ```
 $ ldd test.gobin
         linux-vdso.so.1 =>  (0x00007ffd4b7ed000)
@@ -24,7 +24,7 @@ $ ldd test.gobin
         libc.so.6 => /lib64/libc.so.6 (0x00000032d6600000)
         /lib64/ld-linux-x86-64.so.2 (0x0000560e965ba000)
 ```
-After searching on Google and going through many useful link, I could find out the reason was found to be usage of CGO, which I was using indirectly just by including the package "net".
+After searching on Google and going through many useful links, I could find out the reason to be usage of CGO. I was using CGO indirectly just by including the package "net".
 
 As of this writing, there are two packages which uses CGO.
 * net 
