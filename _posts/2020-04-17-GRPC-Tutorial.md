@@ -33,3 +33,5 @@ go get -u github.com/golang/protobuf/protoc-gen-go
 
 ## Installation
 
+# Resources
+* [GRPC Official Website - Go Quick Start](https://www.grpc.io/docs/quickstart/go/)
