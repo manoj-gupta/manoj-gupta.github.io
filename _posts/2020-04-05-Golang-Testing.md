@@ -152,7 +152,8 @@ go test -bench=. -benchmem
 
 # Tips
 
-__Command line arguments__
+## Command line arguments
+
 One of the interesing problem is to pass comamnd line arguments to the code under test. This can be done easily by setting *os.args* variable as shown below:
 
 __golang/src/args/args.go__
