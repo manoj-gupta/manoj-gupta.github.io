@@ -149,3 +149,57 @@ The **-benchmem** command-line flag will include memory allocation statistics in
 ```
 go test -bench=. -benchmem
 ```
+
+# Tips
+
+## Command line arguments
+One of the interesing problem is to pass comamnd line arguments to the code under test. This can be done easily by setting *os.args* variable as shown below:
+
+__golang/src/args/args.go__
+```
+package main
+
+import (
+	"flag"
+	"fmt"
+)
+
+func main() {
+	passArguments()
+}
+
+func passArguments() string {
+	user := flag.String("user", "root", "Username for the server")
+	flag.Parse()
+	fmt.Printf("Username is %q\n", *user)
+
+	userString := *user
+	return userString
+}
+```
+
+__golang/src/args/args_test.go__
+```
+package main
+
+import (
+	"os"
+	"testing"
+)
+
+func TestArgs(t *testing.T) {
+	expected := "one"
+
+	// save and restore global variable os.Args
+	oldArgs := os.Args
+	defer func() { os.Args = oldArgs }()
+
+	os.Args = []string{"args", "-user=one"}
+
+	actual := passArguments()
+
+	if actual != expected {
+		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual)
+	}
+}
+```
