@@ -1,3 +1,4 @@
+---
 layout: post
 title:  "GRPC Tutorial"
 date:   2020-04-17 11:00:00 +0530
@@ -5,7 +6,36 @@ categories: Golang
 ---
 
 # Overview
-Google RPC
+I will be using Golang in this post. Let's install the software needed.
+
+# Install Golang
+
+Download latest tar for your platform from official site
+
+```
+wget https://dl.google.com/go/go1.14.2.linux-armv6l.tar.gz
+```
+
+Untar the tar file to ```/usr/local```
+
+```
+sudo tar -C /usr/local -xzf go1.14.2.linux-armv6l.tar.gz
+rm go1.14.2.linux-armv6l.tar.gz
+```
+
+Set Golang paths in ```~/.profile```
+
+```
+PATH=$PATH:/usr/local/go/bin
+GOPATH=$HOME/golang
+```
+
+Build directory to work
+
+```
+mkdir golang
+mkdir golang/src
+```
 
 # Google Protocol Buffers
 Google Protocol buffer
