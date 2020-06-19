@@ -13,9 +13,9 @@ I was working with CGO code and realized the need of keeping the C code in a sha
 
 Libraries are wonderful as it provides allows to share the existing compiled code by programmes. Here, we look at how to build C shared library, which I am going to use in Go program using CGO.
 
-Create a folder $(WS)/libs/shared_test, where you can export WS to your working directory path.
+Create a folder $WS/libs/shared_test, where you can export WS to your working directory path.
 
-Create two files needed to build shared library
+Create three files needed to build shared library
 
 __mmap_test.h__
 
@@ -37,9 +37,8 @@ __mmap_test.c__
 
 void mmap_main()
 {
-    char *s = "MANOJ";
     puts("mmap_main: Inside shared library");
-    return 0;
+    return;
 }
 ```
 
@@ -79,7 +78,7 @@ gcc -shared -o libmmap.so mmap_test.o
 **Step 3:** Linking with the shared library
 
 ```
-gcc -L$(WS)/libs/shared_test -Wall -o test_mmap main.c -lmmap
+gcc -L$WS/libs/shared_test -Wall -o test_mmap main.c -lmmap
 ```
 
 Note that you have to specify the library path using **-L** option, otherwise linker does not know where to find libmmap specified with **-l** option above (GCC assumes that all libraries start with lib and end with .so).
@@ -89,9 +88,10 @@ Note that you have to specify the library path using **-L** option, otherwise li
 The output file created test_mmap can not be run just like that. The path where *libmmap.so* is stored need to be specified using LD_LIBRARY_PATH, unless it is copied to standard path.
 
 ```
-export LD_LIBRARY_PATH=$(WS)/libs/shared_test:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$WS/libs/shared_test:$LD_LIBRARY_PATH
 ./test_mmap
-
+Driver Program - Testing shared library
+mmap_main: Inside shared library
 ```
 
 **Step 5** Automate using *Makefile*
@@ -136,8 +136,8 @@ __main.go__
 package main
 
 /*
-#cgo CFLAGS: -I/Users/manoj/git/iris/libs/mmap_test/
-#cgo LDFLAGS: -L/Users/manoj/git/iris/libs/ -lmmap
+#cgo CFLAGS: -I<change with WS>/libs/mmap_test/
+#cgo LDFLAGS: -L<change with WS>/libs/ -lmmap
 
 #include <stdio.h>
 
@@ -152,7 +152,7 @@ import (
 
 func main() {
 	fmt.Println("Golang: shared library test")
-	C.mmap_test()
+	C.mmap_main()
 }
 ```
 
@@ -161,7 +161,8 @@ Build and run program
 ```
 $ go build main.go
 $ ./main
-
+Golang: shared library test
+mmap_main: Inside shared library
 ```
 
 # CGO: How to pass function pointer to C
@@ -203,7 +204,7 @@ In mmap_main() .. to test the callback
 Rebuild shared library
 
 ```
-$ make
+$ make clean; make
 ```
 
 __main.c__
@@ -232,9 +233,12 @@ In main() .. initialize the callback
 Build and run program
 
 ```
-$ gcc -L$(WS)/libs/shared_test -Wall -o test_mmap main.c -lmmap
+$ gcc -L$WS/libs/shared_test -Wall -o test_mmap main.c -lmmap
 $ ./test_mmap
-
+Driver Program - Testing shared library
+mmap_main: Inside shared library
+test_callback called
+arg1: 25 arg2: 0x558d9d2345ea
 ```
 
 __main.go__
@@ -263,7 +267,10 @@ Build and run program
 ```
 $ go build main.go
 $ ./main
-
+Golang: shared library test
+mmap_main: Inside shared library
+test_callback called
+arg1:25 arg2: 0x492640
 ```
 # References
 
