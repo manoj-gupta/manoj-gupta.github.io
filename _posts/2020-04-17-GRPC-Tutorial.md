@@ -121,7 +121,7 @@ It is similar to REST API that exposes functionality within app to other apps us
 
 **Step 1:** To being, here is a simple server Go program that listens on TCP Port (e.g. 9000) for incoming connections.
 
-__test_grpc/server.go__
+__gprc-demo/server.go__
 
 ```
 package main
@@ -141,7 +141,7 @@ func main() {
 
 **Step 2:** Import *grpc* package from *golang.org* to create a gRPC server and start serving. 
 
-__test_grpc/server.go__
+__gprc-demo/server.go__
 
 ```
 package main
@@ -178,7 +178,7 @@ ubuntu@grpc: go get google.golang.org/grpc
 
 Let's add a chat service to this server. Service is defined in a **chat.proto** file using protobuf, exposing single service *ChatService* to be called by gRPC client.
 
-__test_grpc/chat.proto__
+__gprc-demo/chat.proto__
 
 ```
 syntax = "proto3";
@@ -196,10 +196,10 @@ service ChatService {
 **Step 4:** Generate Go specific gRPC code for service using the **protoc** tool
 
 ```
-ubuntu@grpc:~/golang/src/test_grpc$ mkdir chat
-ubuntu@grpc:~/golang/src/test_grpc$ protoc --go_out=plugins=grpc:chat chat.proto
+ubuntu@grpc:~/golang/src/gprc-demo$ mkdir chat
+ubuntu@grpc:~/golang/src/gprc-demo$ protoc --go_out=plugins=grpc:chat chat.proto
 
-ubuntu@grpc:~/golang/src/test_grpc$ ls -R
+ubuntu@grpc:~/golang/src/gprc-demo$ ls -R
 .:
 chat  chat.proto  server.go
 
@@ -230,7 +230,7 @@ func (s *ChatServer) SayHello(ctx context.Context, in *chat.Message) (*chat.Mess
 
 Final server code is:
 
-__test_grpc/server.go__
+__gprc-demo/server.go__
 
 ```
 package main
@@ -243,7 +243,7 @@ import (
 	"golang.org/x/net/context"
 
 	"google.golang.org/grpc"
-	"test_grpc/chat"
+	"gprc-demo/chat"
 )
 
 type ChatServer struct {
@@ -278,7 +278,7 @@ func main() {
 
 After testing that server is up and running, let's write the client code.
 
-__test_grpc/client.go__
+__gprc-demo/client.go__
 
 ```
 package main
@@ -289,7 +289,7 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
-	"test_grpc/chat"
+	"gprc-demo/chat"
 )
 
 func main() {
@@ -319,7 +319,7 @@ Open two terminals and run server in one terminal followed by client in another 
 __Server__
 
 ```
-ubuntu@grpc:~/golang/src/test_grpc$ go run server.go
+ubuntu@grpc:~/golang/src/gprc-demo$ go run server.go
 Go GRPC Tutorial!
 2020/06/21 13:20:17 Receive message body from client: Hello From Client!
 ```
@@ -327,7 +327,7 @@ Go GRPC Tutorial!
 __Client__
 
 ```
-ubuntu@grpc:~/golang/src/test_grpc$ go run client.go
+ubuntu@grpc:~/golang/src/gprc-demo$ go run client.go
 2020/06/21 13:20:17 Response from server: Hello From the Server!
 ```
 
