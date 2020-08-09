@@ -7,7 +7,6 @@ tags:
 last_modified_at: 20120-08-09T14:25:52-05:00
 ---
 
-# Overview
 Testing a.k.a. automated testing, is the practice of writing small programs that check that the code under test behaves as expected for certain inputs, which are either carefully chosen to exercise certain features or randomised to ensure broad coverage.
 
 Go’s approach relies on one command **go test**, and set of conventions for writing test functions that **go test** can run. The lightweight mechanism is effective for pure testing, and it extends naturally to benchmarks and systematic examples for documentation.

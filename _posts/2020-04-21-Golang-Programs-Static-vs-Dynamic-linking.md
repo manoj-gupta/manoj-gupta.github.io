@@ -7,11 +7,7 @@ tags:
 last_modified_at: 20120-08-09T14:25:52-05:00
 ---
 
-# Discovery
-
-It is well known that Golang creates static binaries by default. But is that so?
-
-I was taken by surprise to find out all the Golang binaries that I was using were using dynamic linking. This was easily verified by using *file* command on binary
+It is well known that Golang creates static binaries by default. **But is that so?** I was taken by surprise to find out all the Golang binaries that I was using were using dynamic linking. This was easily verified by using *file* command on binary
 
 ```
 $ file test.gobin

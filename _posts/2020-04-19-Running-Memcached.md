@@ -8,8 +8,6 @@ tags:
 last_modified_at: 20120-08-09T14:25:52-05:00
 ---
 
-## Overview
-
 [Memcached](https://memcached.org/about) is an in-memory key-value, distributed memory object caching system, generic in nature, but originally intended for use in speeding up dynamic web applications by alleviating database load.
 
 Memcached allows you to take memory from parts of your system where you have more than you need and make it accessible to areas where you have less than you need.

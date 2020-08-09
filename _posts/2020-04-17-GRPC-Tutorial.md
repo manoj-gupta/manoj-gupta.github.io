@@ -7,7 +7,6 @@ tags:
 last_modified_at: 20120-08-09T14:25:52-05:00
 ---
 
-# Overview
 I will be using Golang in this post. Let's install the software needed. There are equivalent commands to try on Raspberry-PI.
 
 # Multipass
