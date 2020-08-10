@@ -99,6 +99,9 @@ author:
     - title: Twitter
       url: https://twitter.com/manogup2
       icon: fab fa-twitter-square
+    - title: GitHub
+      url: https://github.com/manoj-gupta
+      icon: fab fa-github-square
 
 # Footer Links
 footer_links:
