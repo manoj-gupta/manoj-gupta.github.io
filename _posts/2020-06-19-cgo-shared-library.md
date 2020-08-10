@@ -4,7 +4,7 @@ categories:
   - Linux
   - Golang
 tags:
-  - linux internals
+  - linux
   - golang
 last_modified_at: 20120-08-09T14:25:52-05:00
 ---

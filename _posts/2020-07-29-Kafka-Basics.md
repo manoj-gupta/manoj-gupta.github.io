@@ -8,7 +8,6 @@ categories:
   - Kafka
 tags:
   - Kafka
-  - Tutorial
 ---
 
 Apache Kafka is a **distributed publish-subscribe messaging system** that is designed to be fast, scalable, and durable. Kafka stores streams of records (messages) in topics. Each record consists of *a key, a value, and a timestamp*. Producers write data to topics and consumers read from topics.

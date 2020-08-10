@@ -3,7 +3,6 @@ title: "Working with K3s using Multipass"
 categories:
   - Kubernetes
 tags:
-  - open source
   - kubernetes
   - k3s
 last_modified_at: 20120-08-09T14:25:52-05:00
