@@ -18,7 +18,7 @@ theme: jekyll-theme-so-simple
 skin: "/assets/css/skins/default.css"
 locale: en-US
 title: "Manoj Gupta's Blog"
-description: "Open source, Networking and Machine Learning"
+description: "Open source, Networking and Cloud Computing"
 baseurl: # the subpath of your site, e.g. "/blog"
 url: https://manoj-gupta.github.io/ # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 logo: "/images/mg-logo.png" # path of site logo, e.g. "/images/logo.png"
