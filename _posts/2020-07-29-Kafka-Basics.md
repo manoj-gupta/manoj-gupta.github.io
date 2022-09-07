@@ -36,7 +36,7 @@ In the picture below, there are three brokers with *topic A* having two partitio
 
 ![image-center]({{ '/images/TopicsBrokersReplication.png' | absolute_url }}){: .align-center}
 
-At any time, only one broker can be a **leader** for a given partition. Only leader can receive and server data for the partition. Leader is responsible for synchronizing the data with other brokers.
+At any time, only one broker can be a **leader** for a given partition. Only leader can receive and send data for the partition. Leader is responsible for synchronizing the data with other brokers.
 
 ## Producers and Message Keys
 
@@ -67,7 +67,7 @@ Every message in a topic is delivered to one of the consumer instances inside th
 
 ## Consumer offsets and Delivery Semantics
 
-Kafka stores the offsets at which a consumer group has been reading. These offsets are committed live in a Kafka topic named ```__consumer__offsets```. This helps a consumer to read from it left off in case it dies.
+Kafka stores the offsets at which a consumer group has been reading. These offsets are committed live in a Kafka topic named ```__consumer__offsets```. This helps a consumer to read from where it left off in case it dies.
 
 Kafka gives consumers to choose when to commit the offsets. There are three delivery semantics:
 * **At most once** — offsets are committed as soon as the message is received. If processing goes wrong, the message is lost.
@@ -92,7 +92,7 @@ Zookeeper by design operates with an odd number of servers (3, 5, 7 …). Zookee
 
 ## Installation
 
-* Download binary from Kafka Download [website](https://kafka.apache.org/downloads).
+* Download Kafka's binary from [official download page](https://kafka.apache.org/downloads).
 * Untar it to a directory using following command ```tar -xvf kafka_2.12–2.5.0.tgz``` Calling this directory as ```KAFKA_DIR``` for future reference.
 * Check it is running using ```bin/kafka-topics.sh```
 * Add the path to ```PATH``` environment variable by editing ```.profile``` file
@@ -104,13 +104,13 @@ Go to the directory ```KAFKA_DIR``` and issue following commands:
 **Start Zookeeper**
 
 ```
-zookeeper-server-start.sh config/zookeeper.properties
+bin/zookeeper-server-start.sh config/zookeeper.properties
 ```
 
 **Start Kafka server**
 
 ```
-kafka-server-start.sh config/server.properties
+bin/kafka-server-start.sh config/server.properties
 ```
 
 This is all that you need to start *Zookeeper* and *Kafka server* using default config. 
@@ -134,17 +134,17 @@ Use following commands after running *zookeeper* and *kafka*
 **Topics CLI**
 
 ```
-kafka-topics.sh — bootstrap-server localhost:9092 — topic first_topic — create — partitions 3 — replication-factor 1
-kafka-topics.sh — bootstrap-server localhost:9092 — list
-kafka-topics.sh — bootstrap-server localhost:9092 — topic first_topic — describe
-kafka-topics.sh — bootstrap-server localhost:9092 — topic first_topic — delete
+kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --create --partitions 3 --replication-factor 1
+kafka-topics.sh --bootstrap-server localhost:9092 --list
+kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --describe
+kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --delete
 ```
 
 **Console Producer CLI**
 
 ```
-kafka-console-producer.sh — bootstrap-server localhost:9092 — topic first_topic
-kafka-console-producer.sh — bootstrap-server localhost:9092 — topic first_topic — producer-property acks=all
+kafka-console-producer.sh --bootstrap-server localhost:9092 --topic first_topic
+kafka-console-producer.sh --bootstrap-server localhost:9092 --topic first_topic --producer-property acks=all
 ```
 
 Just enter messages on ```>```
@@ -152,42 +152,42 @@ Just enter messages on ```>```
 **Producer with keys**
 
 ```
-kafka-console-producer.sh — bootstrap-server localhost:9092 — topic kv_topic — property parse.key=true — property key.separator=,
+kafka-console-producer.sh --bootstrap-server localhost:9092 --topic kv_topic --property parse.key=true --property key.separator=,
 Console Consumer CLI
 Only messages generated after consumer starts to consume.
-kafka-console-consumer.sh — bootstrap-server localhost:9092 — topic first_topic
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic first_topic
 ```
 
 **To read messages from beginning**
 
 ```
-kafka-console-consumer.sh — bootstrap-server localhost:9092 — topic first_topic — from-beginning
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic first_topic --from-beginning
 ```
 
 **Using consumer groups**
 
 ```
-kafka-console-consumer.sh — bootstrap-server localhost:9092 — topic first_topic — group first-application
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic first_topic --group first-application
 ```
 
 **Consumer with keys**
 
 ```
-kafka-console-consumer.sh — bootstrap-server localhost:9092 — topic kv_topic — from-beginning — property print.key=true — property key.separator=,
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic kv_topic --from-beginning --property print.key=true --property key.separator=,
 ```
 
 **Consumer Groups CLI**
 
 ```
-kafka-consumer-groups.sh — bootstrap-server localhost:9092 — list
-kafka-consumer-groups.sh — bootstrap-server localhost:9092 — describe — group first-application
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group first-application
 ```
 
 **Reset offsets**
 
 ```
-kafka-consumer-groups.sh — bootstrap-server localhost:9092 — group first-application — reset-offsets — to-earliest — execute — topic first_topic
-kafka-consumer-groups.sh — bootstrap-server localhost:9092 — group first-application — reset-offsets — shift-by -2 — execute — topic first_topic
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group first-application --reset-offsets --to-earliest --execute --topic first_topic
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group first-application --reset-offsets --shift-by -2 --execute --topic first_topic
 ```
 
 # Internals
