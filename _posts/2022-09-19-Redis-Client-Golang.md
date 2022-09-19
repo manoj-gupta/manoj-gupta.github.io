@@ -1,9 +1,5 @@
 ---
 title: "Redis Client In Golang"
-# image: 
-#   path: /images/KafkaTopic.png
-#   thumbnail: /images/KafkaCluster.png
-#   caption: "Kafka Cluster"
 categories:
   - Redis
 tags:
@@ -12,7 +8,7 @@ tags:
   - distributed computing
 ---
 
-**RE**mote **DI**ctionary **S**ervice ([redis](https://redis.io/)) is an in-memory key-value **data structure store** used as a cache/database. Generally, it used as a cache in front of another persistent database to speed up application performance.
+**Re**mote **di**ctionary **s**ervice ([redis](https://redis.io/)) is an in-memory key-value **data structure store** used as a cache/database. Generally, it used as a cache in front of another persistent database to speed up application performance.
 
 Redis provides in-built support for various data structures such as
 * strings
