@@ -17,7 +17,7 @@ Go has excellent support for encoding and decoding JavaScript Object Notation (J
 
 * Converting a Go data structure to JSON is called `marshaling`. Marshaling is done by `json.Marshal`. Marshal produces a byte slice containing a very long string with no white space. For human consumption, a variant called `json.MarshalIndent` produces neatly indented output.
 * The inverse operation to `marshaling`, decoding JSON and populating a Go data structure, is called `unmarshaling`, and it is done by `json.Unmarshal`.
-* Another useful function is `json.Indent`. It can be used to produced indented output from an existing JSON text. An example usage is shown below:
+* Another useful function is `json.Indent`. It can be used to produced indented output from an existing JSON text. An example usage is shown below.
 
 ```
 package main
