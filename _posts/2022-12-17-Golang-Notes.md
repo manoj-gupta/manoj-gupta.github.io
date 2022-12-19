@@ -18,7 +18,7 @@ A template is a string or file containing one or more portions enclosed in doubl
 * Range loops
 * Instantiating other templates
 
-Good article explaing templates is at [gopheracademy](https://blog.gopheracademy.com/advent-2017/using-go-templates/)
+Good article explaing templates is at [Gopher Academy Blog](https://blog.gopheracademy.com/advent-2017/using-go-templates/)
 
 # Concurrenent Programming
 
@@ -138,7 +138,7 @@ There are two packages which uses CGO.
 # References
 
 * The Go Programming Language, Alan Donovan, B. Kernighan
-* [Gopheracademy](https://blog.gopheracademy.com)
+* [Gopher Academy Blog](https://blog.gopheracademy.com)
 * [Internals of Go channels](https://shubhagr.medium.com/internals-of-go-channels-cf5eb15858fc)
 * [Statically compiling Go programs](https://www.arp242.net/static-go.html)
 
