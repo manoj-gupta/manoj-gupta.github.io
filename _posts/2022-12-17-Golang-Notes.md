@@ -9,7 +9,35 @@ last_modified_at: 2022-12-18T14:25:52-05:00
 
 Following are my notes after reading resources mentioned in **Reference** section. This will serve as a single point of reference for me.
 
+# JSON
+
+JSON is an encoding of JavaScript values—strings, numbers, booleans, arrays, and objects —as Unicode text. It’s an efficient yet readable representation for the basic data types of arrays, slices, structs, and maps.
+
+Go has excellent support for encoding and decoding JavaScript Object Notation (JSON) format, provided by the standard library package `encoding/json`. 
+
+* Converting a Go data structure to JSON is called `marshaling`. Marshaling is done by `json.Marshal`. Marshal produces a byte slice containing a very long string with no white space. For human consumption, a variant called `json.MarshalIndent` produces neatly indented output.
+* The inverse operation to `marshaling`, decoding JSON and populating a Go data structure, is called `unmarshaling`, and it is done by `json.Unmarshal`.
+* Another useful function is `json.Indent`. It can be used to produced indented output from an existing JSON text. An example usage is shown below:
+```
+func main() {
+	input := []byte(`{"login": "manoj-gupta","id": 12345678}`)
+	fmt.Println(input)
+	fmt.Println(string(prettify(input)))
+}
+
+func prettify(input []byte) []byte {
+	var prettyJSON bytes.Buffer
+	error := json.Indent(&prettyJSON, input, "", "\t")
+	if error != nil {
+		fmt.Println("JSON parse error: ", error)
+		return []byte{}
+	}
+	return prettyJSON.Bytes()
+}
+```
+
 # Text and HTML Templates
+
 A template is a string or file containing one or more portions enclosed in double braces, `{` `{`...`}` `}`, called *actions*. Most of the string is printed literally, but each action contains an expression in the template language for
 * Printing values
 * Selecting struct fields
