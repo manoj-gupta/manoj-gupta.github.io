@@ -7,7 +7,8 @@ tags:
 last_modified_at: 2022-12-18T14:25:52-05:00
 ---
 
-Following are my notes after reading resources mentioned in **Reference** section. This will serve as a single point of reference for me.
+* TOC
+{:toc}
 
 # JSON
 
