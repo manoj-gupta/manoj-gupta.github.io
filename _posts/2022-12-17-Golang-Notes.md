@@ -1,3 +1,12 @@
+---
+title: "Golang Notes"
+categories:
+  - Golang
+tags:
+  - golang
+last_modified_at: 2022-12-18T14:25:52-05:00
+---
+
 Following are my notes after reading resources mentioned in **Reference** section. This will serve as a single point of reference for me.
 
 
@@ -92,7 +101,33 @@ As we know, after a channel has been closed and drained of all sent values, subs
 
 To to this, we create a cancellation channel on which no values are ever sent, but whose closure indicates that it is time for the program to stop what it is doing. All `goroutines` which need to be communicated of an event does `receive` on this channel. The `goroutine` which need to broadcast event simply `close` this channel.  
 
+# Golang Programs - Static vs Dynamic Linking
+
+It is well known that Golang creates static binaries by default. I was surprised to find out all the Golang binaries that I was using were using dynamic linking. This was easily verified by using *file* command on binary
+
+```
+$ file test.gobin
+file test.gobin:      ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), not stripped
+```
+
+To find out the libaries being linked, use *ldd* command
+```
+$ ldd test.gobin
+        linux-vdso.so.1 =>  (0x00007ffd4b7ed000)
+        libpthread.so.0 => /lib64/libpthread.so.0 (0x00000032d6e00000)
+        libc.so.6 => /lib64/libc.so.6 (0x00000032d6600000)
+        /lib64/ld-linux-x86-64.so.2 (0x0000560e965ba000)
+```
+The reason is the usage of CGO indirectly just by including the package "net".
+
+There are two packages which uses CGO.
+* net 
+* os/user 
+
+
 # References
 
 * The Go Programming Language, Alan Donovan, B. Kernighan
 * [Internals of Go channels](https://shubhagr.medium.com/internals-of-go-channels-cf5eb15858fc)
+* [Statically compiling Go programs](https://www.arp242.net/static-go.html)
+
