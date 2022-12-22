@@ -7,6 +7,8 @@ tags:
 last_modified_at: 2022-12-18T14:25:52-05:00
 ---
 
+Golang is an open-source, compiled, and statically typed programming language designed by Google. It is built to be simple, high-performing, readable, and efficient.
+
 * TOC
 {:toc}
 
@@ -21,16 +23,8 @@ Go has excellent support for encoding and decoding JavaScript Object Notation (J
 * Another useful function is `json.Indent`. It can be used to produced indented output from an existing JSON text. An example usage is shown below.
 
 ```
-package main
-
-import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-)
-
 func main() {
-	input := []byte(`{"login": "manoj-gupta","id": 12345678}`)
+	input := []byte(`{"login": "sample-id","id": 12345678}`)
 	fmt.Println(input)
 	fmt.Println(string(prettify(input)))
 }
@@ -58,7 +52,7 @@ A template is a string or file containing one or more portions enclosed in doubl
 
 Good article explaing templates is at [Gopher Academy Blog](https://blog.gopheracademy.com/advent-2017/using-go-templates/)
 
-# Concurrenent Programming
+# Concurrent programming
 
 Golang enables two types of concurrent programming: `goroutines` and `channels`.
 
@@ -177,6 +171,7 @@ There are two packages which uses CGO.
 
 * The Go Programming Language, Alan Donovan, B. Kernighan
 * [Gopher Academy Blog](https://blog.gopheracademy.com)
-* [Internals of Go channels](https://shubhagr.medium.com/internals-of-go-channels-cf5eb15858fc)
-* [Statically compiling Go programs](https://www.arp242.net/static-go.html)
+* [The Go Blog](https://go.dev/blog/laws-of-reflection)
+* [Go Data Structures: Interfaces](https://research.swtch.com/interfaces)
+
 
