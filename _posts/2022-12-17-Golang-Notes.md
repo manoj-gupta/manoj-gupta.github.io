@@ -143,7 +143,161 @@ As we know, after a channel has been closed and drained of all sent values, subs
 
 To to this, we create a cancellation channel on which no values are ever sent, but whose closure indicates that it is time for the program to stop what it is doing. All `goroutines` which need to be communicated of an event does `receive` on this channel. The `goroutine` which need to broadcast event simply `close` this channel.  
 
-# Golang Programs - Static vs Dynamic Linking
+# Type, Interface and Reflection
+
+Understanding *Type*, *Interface* and *Reflection* should be done together because *interface* is a special *type* and *reflection* is built on *types*.
+
+Golang is **statically typed** language. Every variable has a static type, that is, exactly one type known and fixed at compile time: `int`, `float32`, `*UserType`, `[]byte` etc.
+
+## Interfaces
+One important category of type is `interface` types, which represent **fixed sets of methods**. Any type that *implements* these methods is said to *implement the interface*.
+
+Interfaces are **statically typed**: a variable of interface type always has the same static type, and even though at run time the value stored in the interface variable may change type, that value will always satisfy the interface. An extremely important example of an interface type is the **empty interface** `interface{}` which represents the empty set of methods and is satisfied by any value.
+
+A variable of interface type stores a pair: the **concrete value** assigned to the variable, and that **value’s type descriptor**. To be more precise, the value is the underlying concrete data item that implements the interface and the type describes the full type of that item.
+
+Let's defined an interface `shape`, which has two methods `Area` and `Perimeter` that accepts no arguments and return `float64` value.
+
+```
+// Shape is an interface
+type Shape interface {
+    Area() float64
+    Perimeter() float64
+}
+```
+
+Since the `interface` is a type just like a `struct`, we can create a variable of its type. Let's create a variable `s` of type interface `Shape` and print it's type and value.
+```
+var s shape
+fmt.Printf("Type of s is %T\n", s)
+fmt.Printf("Value of s is %v\n", s)
+```
+
+It has **zero value** and **nil type** as variable `s` is just declard of type `Shape` but not assigned any value.
+```
+Type of s is <nil>
+Value of s is <nil>
+```
+
+Any type that implements these methods (with exact method signatures) will also implement `Shape` interface. Let's define a new type `Rectangle` which implements `Shape` interface
+```
+// Rectangle is a type which implements `Shape` interface
+type Rectangle struct {
+	length  float64
+	breadth float64
+}
+
+// Area of Rectangle
+func (r Rectangle) Area() float64 {
+	return r.length * r.breadth
+}
+
+// Perimeter of Rectangle
+func (r Rectangle) Perimeter() float64 {
+	return 2 * (r.length + r.breadth)
+}
+```
+Now, create of variable of type `Rectangle` and assing it to `s` and print type and value of `s`.
+```
+var s Shape
+s = Rectangle{1, 2}
+fmt.Printf("Type of s is %T\n", s)
+fmt.Printf("Value of s is %v\n", s)
+```
+
+We can see that, dynamic type of `s` is now `main.Rectangle` and dynamic value of s is the value of the struct Rect which is `{1 2}`.
+```
+Type of s is main.Rectangle
+Value of s is {1 2}
+```
+
+Two **interface variables are equal** if both of these variable holds the same *dynamic type* and *dynamic value*. Let's define one more variable `r` of `Rectangle` type and having same value `{1, 2}`
+
+```
+var s Shape
+s = Rectangle{1, 2}
+r := Rectangle{1, 2}
+fmt.Printf("Type of s is %T\n", s)
+fmt.Printf("Value of s is %v\n", s)
+fmt.Println("s == r is ", s == r)
+```
+
+They are equal as shown below
+```
+Type of s is main.Rectangle
+Value of s is {1 2}
+s == r is  true
+```
+
+## Reflection
+
+**interface value => reflection object**
+
+*Reflection* is a mechanism to examine the *type* and *value* pair stored inside an interface variable. The [reflect package](https://go.dev/pkg/reflect/) provides two types: [Type](https://go.dev/pkg/reflect/#Type) and [Value](https://go.dev/pkg/reflect/#Value), which provide access to the content of an interface variable. Also, two functions: `reflect.TypeOf` and `reflect.ValueOf`, retrieve `reflect.Type` and `reflect.Value` pieces out of an interface value.
+
+Important methods in `reflect.Type` and `reflect.Value`:
+* `reflect.Value` has a `Type` method that returns the `Type` of a `reflect.Value`.
+* Both `reflect.Type` and `reflect.Value` have a `Kind` method that returns a constant indicating what sort of item is stored.
+
+**reflection object => interface value**
+
+Like physical reflection, reflection in Go generates its own inverse.
+
+`Interface` method returns interface value from `reflect.Value`. This method packs the *type* and *value* information back into an interface representation and returns the result:
+```
+// Interface returns v's value as an interface{}.
+func (v Value) Interface() interface{}
+```
+
+**The value must be settable t0 modify a reflection object**
+
+*Settability* is a property of a reflection `Value`, and not all reflection `Values` have it. It’s the property that a reflection object can modify the **actual storage** that was used to create the reflection object. Settability is determined by whether the reflection object holds the original item.
+
+The `CanSet` method of Value reports the settability of a `Value`.
+
+### Using reflection to modify the fields of a structure
+
+We create the reflection object with the **address** of the struct because we’ll want to modify it later. Then we set `typeOfT` to its type and iterate over the fields using method calls. Note that we extract the names of the fields from the struct type, but the fields themselves are regular `reflect.Value` objects.
+```
+type Rectangle struct {
+	Length  int
+	Breadth float64
+}
+
+t := Rectangle{5, 6.6}
+s := reflect.ValueOf(&t).Elem()
+typeOfT := s.Type()
+for i := 0; i < s.NumField(); i++ {
+    f := s.Field(i)
+    fmt.Printf("%d: %s %s = %v\n", i,
+        typeOfT.Field(i).Name, f.Type(), f.Interface())
+}
+```
+
+Output:
+```
+0: Length int = 5
+1: Breadth float64 = 6.6
+```
+
+**Note:** The field names of `Rectangle` are upper case (exported) because only exported fields of a struct are settable.
+
+Because `s` contains a settable reflection object, we can modify the fields of the structure.
+```
+s.Field(0).SetInt(77)
+s.Field(1).SetFloat(99.8)
+```
+
+Output:
+```
+fmt.Println("t is now", t)
+```
+
+If we modified the program so that `s` was created from `t`, not `&t`, the calls to `SetInt` and `SetFloat` would fail as the fields of `t` would not be settable.
+
+# Miscellaneous
+
+## Static vs Dynamic Linking
 
 It is well known that Golang creates static binaries by default. I was surprised to find out all the Golang binaries that I was using were using dynamic linking. This was easily verified by using *file* command on binary
 
@@ -166,12 +320,15 @@ There are two packages which uses CGO.
 * net 
 * os/user 
 
+## Number literal prefixes
+
+[Go 1.13](https://go.dev/doc/go1.13) allowed number literal prefixes, which allowed **digit seperators** among other things. The digits of any number literal may now be separated (grouped) using underscores, such as in `1_000_000`, `0b_1010_0110`, or `3.1415_9265`. An underscore may appear between any two digits or the literal prefix and the first digit.
 
 # References
 
 * The Go Programming Language, Alan Donovan, B. Kernighan
 * [Gopher Academy Blog](https://blog.gopheracademy.com)
-* [The Go Blog](https://go.dev/blog/laws-of-reflection)
 * [Go Data Structures: Interfaces](https://research.swtch.com/interfaces)
+* [The Go Blog](https://go.dev/blog/laws-of-reflection)
 
 
