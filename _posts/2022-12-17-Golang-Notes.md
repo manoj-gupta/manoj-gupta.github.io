@@ -18,6 +18,16 @@ Data types are categorized into four categories as shown below.
 
 ![image-center]({{ '/images/golang/golang_types.png' | absolute_url }}){: .align-center}
 
+# Functions vs Methods
+
+**Function** definition consists of `func` keyword, `function nam`e, `parameters` and `return values` if any exists.
+
+![image-center]({{ '/images/golang/golang_function.png' | absolute_url }}){: .align-center}
+
+**Methods** are *functions* that contain a receiver argument in their signature. Receiver arguments are used to access the properties of the receiver. The receiver can be a struct or non-struct type.
+
+![image-center]({{ '/images/golang/golang_method.png' | absolute_url }}){: .align-center}
+
 
 # Concurrent programming
 
