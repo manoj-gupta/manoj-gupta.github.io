@@ -120,6 +120,115 @@ As we know, after a channel has been closed and drained of all sent values, subs
 
 To to this, we create a cancellation channel on which no values are ever sent, but whose closure indicates that it is time for the program to stop what it is doing. All `goroutines` which need to be communicated of an event does `receive` on this channel. The `goroutine` which need to broadcast event simply `close` this channel.  
 
+# Sync Package
+
+The `sync` package is an essential part of the `Golang` concurrency implementation, which supports only two types, `Mutex` and `RWMutex`.
+
+## Mutual Exclusion: sync.Mutex
+
+ `Mutex` is an implementation of an exclusive lock, based on which all the synchronization logic is built. It has 3 API functions: `Lock`, `Unlock` and `TryLock`.
+ 
+`Lock` method acquires the token (called a *lock*) and its `Unlock` method releases it. Each time a *goroutine* accesses shared variables, it must call the mutex’s `Lock` method to acquire an exclusive *lock*. If some other *goroutine* has acquired the *lock*, this operation will block until the other *goroutine* calls `Unlock` and the *lock* becomes available again. The mutex **guards** the shared variables.
+
+`TryLock` tries to take the lock and reports whether it succeeded. 
+
+## Read/WriteMutexes: sync.RWMutex
+
+`RWMutex` allows read-only operations to proceed in parallel with each other (`RLOCK` method), but write operations to have fully exclusive access (`RUnlock` method). This lock is called a **multiple readers, single writer** lock. It is applicable for sync scenarios with more reads and fewer writes.
+
+## Lazy Initialization: sync.Once
+It is good practice to defer an expensive initialization step until the moment it is needed. Initializing a variable up front increases the start-up latency of a program and is unnecessary if execution doesn’t always reach the par t of the program that uses that variable.
+
+`Once` has only one `Do` method, and accepts only one `func` parameter.
+
+In the implementation, a `Mutex` and `uint` guarantees that `Once` is executed only once, turning the unit from 0 to 1 after execution.
+
+**Example:**
+
+```
+func main() {
+  var once sync.Once
+  onceBody := func() {
+  // some heavy operations
+  }
+  done := make(chan bool)
+  for i := 0; i < 10; i++ {
+    go func() {
+    once.Do(onceBody) // onceBody will only be called once.
+    done <- true
+    }()
+  }
+  for i := 0; i < 10; i++ {
+    <-done
+  }
+}
+```
+
+## Wait for Others: sync.WaitGroup
+
+`WaitGroup` allows one or more `goroutines` to be *blocked* by a set of executing `groutinues`. It provides three methods:
+
+* `Add` adds delta sync-waiting goroutines.
+* `Done` reduces 1 from the counter after a goroutine finishes executing.
+* `Wait`  implemented through an infinite `for` loop internally, exit upon the counter returns to 0, enabling the blocked goroutine to continue executing.
+
+A typical `WaitGroup` usage is as follows:
+```
+wg := &sync.WaitGroup{}
+for i := 0; i < n; i++ {  // executing goroutines for which main goroutine want to wait
+wg.Add(1) // Add one for each goroutine
+go func() {
+  // execute logic
+  wg.Done()  // declare finished
+}()
+}
+wg.Wait()  // main goroutine is blocked till all goroutines finishes
+```
+
+## Sync.Pool
+
+`Pool` purpose is to cache allocated but unused items for later reuse, relieving pressure on the garbage collector. That is, it makes it easy to build efficient, thread-safe free lists. 
+
+It can save memory overhead and reduce GC pressure in some cases.
+
+* `Get` gets an object from the `Pool` with a *key*.
+* `Put` puts a *key* and an object into `Pool`.
+
+**Example:**
+
+For scenarios with a large number of calls to the Log method, we obtain a Buffer from Pool and put it back to reduce the creation of Buffer.
+
+```
+var bufPool = sync.Pool{
+  New: func() any {
+  return new(bytes.Buffer)
+  },
+}
+func Log(w io.Writer, key, val string) {
+  b := bufPool.Get().(*bytes.Buffer)
+  b.Reset()
+  // Replace this with time.Now() in a real logger.
+  b.WriteString(timeNow().UTC().Format(time.RFC3339))
+  b.WriteByte(' ')
+  b.WriteString(key)
+  b.WriteByte('=')
+  b.WriteString(val)
+  w.Write(b.Bytes())
+  bufPool.Put(b)
+}
+
+```
+
+## Sync.Map
+
+`Map` is a Concurrent Map implementation. The two most common suitable scenarios are:
+
+* When the entry for a given key is only ever written once but read many times, as in caches that only grow.
+* When multiple goroutines read, write, and overwrite entries for disjoint sets of keys.
+
+Generally, `sync.Map` is more efficient than the synchronous map implemented by `map` + `RWMutex`.
+
+
 # Type, Interface and Reflection
 
 Understanding *Type*, *Interface* and *Reflection* should be done together because *interface* is a special *type* and *reflection* is built on *types*.
