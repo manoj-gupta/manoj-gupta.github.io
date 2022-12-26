@@ -12,6 +12,12 @@ Golang is an open-source, compiled, and statically typed programming language de
 * TOC
 {:toc}
 
+# Golang Types
+
+Data types are divide into four categories which are as follows:
+
+![image-center]({{ '/images/golang/golang_types.png' | absolute_url }}){: .align-center}
+
 # JSON
 
 JSON is an encoding of JavaScript values—strings, numbers, booleans, arrays, and objects —as Unicode text. It’s an efficient yet readable representation for the basic data types of arrays, slices, structs, and maps.
